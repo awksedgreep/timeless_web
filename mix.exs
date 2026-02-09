@@ -4,7 +4,7 @@ defmodule TimelessWeb.MixProject do
   def project do
     [
       app: :timeless_web,
-      version: "0.7.0",
+      version: "0.8.0",
       elixir: "~> 1.15",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
@@ -60,7 +60,7 @@ defmodule TimelessWeb.MixProject do
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.2.0"},
       {:bandit, "~> 1.5"},
-      {:timeless, path: "../metric_store"}
+      {:timeless, path: "../timeless"}
     ]
   end
 

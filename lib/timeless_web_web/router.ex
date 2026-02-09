@@ -26,5 +26,8 @@ defmodule TimelessWebWeb.Router do
     live "/annotations", AnnotationsLive
     live "/schema", SchemaLive
     live "/health", HealthLive
+    live "/backup", BackupLive
+
+    get "/backup/download/:name", BackupController, :download
   end
 end

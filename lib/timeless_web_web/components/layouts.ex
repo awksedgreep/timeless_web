@@ -65,6 +65,12 @@ defmodule TimelessWebWeb.Layouts do
             label="Health"
             active={@active_page == :health}
           />
+          <.nav_link
+            href={~p"/timeless/backup"}
+            icon="hero-archive-box"
+            label="Backup"
+            active={@active_page == :backup}
+          />
         </nav>
 
         <div class="p-3 border-t border-base-300">

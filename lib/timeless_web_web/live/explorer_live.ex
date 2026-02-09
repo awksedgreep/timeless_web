@@ -176,7 +176,15 @@ defmodule TimelessWebWeb.ExplorerLive do
   end
 
   defp extract_form_params(params) do
-    Map.take(params, ["metric", "range", "bucket", "aggregate", "transform", "transform_arg1", "transform_arg2"])
+    Map.take(params, [
+      "metric",
+      "range",
+      "bucket",
+      "aggregate",
+      "transform",
+      "transform_arg1",
+      "transform_arg2"
+    ])
   end
 
   defp maybe_assign(socket, params, param_key, assign_key) do
@@ -292,17 +300,44 @@ defmodule TimelessWebWeb.ExplorerLive do
   end
 
   defp post_op_snippet(nil), do: ""
-  defp post_op_snippet(:rate), do: "\n# Per-second rate of change\nseries = Enum.map(series, fn s ->\n  rated = s.data |> Enum.chunk_every(2, 1, :discard) |> Enum.map(fn [{t1,v1},{t2,v2}] -> {t2, (v2-v1)/(t2-t1)} end)\n  %{s | data: rated}\nend)"
-  defp post_op_snippet(:nn_rate), do: "\n# Non-negative rate (counter-safe)\nseries = Enum.map(series, fn s ->\n  rated = s.data |> Enum.chunk_every(2, 1, :discard) |> Enum.map(fn [{t1,v1},{t2,v2}] -> {t2, max((v2-v1)/(t2-t1), 0.0)} end)\n  %{s | data: rated}\nend)"
-  defp post_op_snippet(:delta), do: "\n# Delta (change between points)\nseries = Enum.map(series, fn s ->\n  deltas = s.data |> Enum.chunk_every(2, 1, :discard) |> Enum.map(fn [{_,v1},{t2,v2}] -> {t2, v2-v1} end)\n  %{s | data: deltas}\nend)"
-  defp post_op_snippet({:moving_avg, w}), do: "\n# Moving average (window: #{w})\nseries = Enum.map(series, fn s ->\n  {ts, vs} = {Enum.map(s.data, &elem(&1,0)), Enum.map(s.data, &elem(&1,1))}\n  smoothed = vs |> Enum.chunk_every(#{w}, 1, :discard) |> Enum.map(&(Enum.sum(&1)/length(&1)))\n  %{s | data: Enum.zip(Enum.drop(ts, #{w - 1}), smoothed)}\nend)"
+
+  defp post_op_snippet(:rate),
+    do:
+      "\n# Per-second rate of change\nseries = Enum.map(series, fn s ->\n  rated = s.data |> Enum.chunk_every(2, 1, :discard) |> Enum.map(fn [{t1,v1},{t2,v2}] -> {t2, (v2-v1)/(t2-t1)} end)\n  %{s | data: rated}\nend)"
+
+  defp post_op_snippet(:nn_rate),
+    do:
+      "\n# Non-negative rate (counter-safe)\nseries = Enum.map(series, fn s ->\n  rated = s.data |> Enum.chunk_every(2, 1, :discard) |> Enum.map(fn [{t1,v1},{t2,v2}] -> {t2, max((v2-v1)/(t2-t1), 0.0)} end)\n  %{s | data: rated}\nend)"
+
+  defp post_op_snippet(:delta),
+    do:
+      "\n# Delta (change between points)\nseries = Enum.map(series, fn s ->\n  deltas = s.data |> Enum.chunk_every(2, 1, :discard) |> Enum.map(fn [{_,v1},{t2,v2}] -> {t2, v2-v1} end)\n  %{s | data: deltas}\nend)"
+
+  defp post_op_snippet({:moving_avg, w}),
+    do:
+      "\n# Moving average (window: #{w})\nseries = Enum.map(series, fn s ->\n  {ts, vs} = {Enum.map(s.data, &elem(&1,0)), Enum.map(s.data, &elem(&1,1))}\n  smoothed = vs |> Enum.chunk_every(#{w}, 1, :discard) |> Enum.map(&(Enum.sum(&1)/length(&1)))\n  %{s | data: Enum.zip(Enum.drop(ts, #{w - 1}), smoothed)}\nend)"
 
   defp transform_snippet_line(nil), do: ""
-  defp transform_snippet_line({:multiply, n}), do: "\nseries = Enum.map(series, &Map.update!(&1, :data, fn d -> Timeless.Transform.apply(d, {:multiply, #{n}}) end))"
-  defp transform_snippet_line({:divide, n}), do: "\nseries = Enum.map(series, &Map.update!(&1, :data, fn d -> Timeless.Transform.apply(d, {:divide, #{n}}) end))"
-  defp transform_snippet_line({:offset, n}), do: "\nseries = Enum.map(series, &Map.update!(&1, :data, fn d -> Timeless.Transform.apply(d, {:offset, #{n}}) end))"
-  defp transform_snippet_line({:log10}), do: "\nseries = Enum.map(series, &Map.update!(&1, :data, fn d -> Timeless.Transform.apply(d, {:log10}) end))"
-  defp transform_snippet_line({:scale, m, b}), do: "\nseries = Enum.map(series, &Map.update!(&1, :data, fn d -> Timeless.Transform.apply(d, {:scale, #{m}, #{b}}) end))"
+
+  defp transform_snippet_line({:multiply, n}),
+    do:
+      "\nseries = Enum.map(series, &Map.update!(&1, :data, fn d -> Timeless.Transform.apply(d, {:multiply, #{n}}) end))"
+
+  defp transform_snippet_line({:divide, n}),
+    do:
+      "\nseries = Enum.map(series, &Map.update!(&1, :data, fn d -> Timeless.Transform.apply(d, {:divide, #{n}}) end))"
+
+  defp transform_snippet_line({:offset, n}),
+    do:
+      "\nseries = Enum.map(series, &Map.update!(&1, :data, fn d -> Timeless.Transform.apply(d, {:offset, #{n}}) end))"
+
+  defp transform_snippet_line({:log10}),
+    do:
+      "\nseries = Enum.map(series, &Map.update!(&1, :data, fn d -> Timeless.Transform.apply(d, {:log10}) end))"
+
+  defp transform_snippet_line({:scale, m, b}),
+    do:
+      "\nseries = Enum.map(series, &Map.update!(&1, :data, fn d -> Timeless.Transform.apply(d, {:scale, #{m}, #{b}}) end))"
 
   defp transform_snippet_opt(nil), do: ""
   defp transform_snippet_opt({:multiply, n}), do: ",\n    transform: {:multiply, #{n}}"
@@ -364,13 +399,24 @@ defmodule TimelessWebWeb.ExplorerLive do
   defp parse_transform(%{"transform" => "rate"}), do: {nil, :rate}
   defp parse_transform(%{"transform" => "nn_rate"}), do: {nil, :nn_rate}
   defp parse_transform(%{"transform" => "delta"}), do: {nil, :delta}
-  defp parse_transform(%{"transform" => "moving_avg", "transform_arg1" => n}), do: {nil, {:moving_avg, max(round(parse_number(n)), 2)}}
-  defp parse_transform(%{"transform" => "multiply", "transform_arg1" => n}), do: {{:multiply, parse_number(n)}, nil}
-  defp parse_transform(%{"transform" => "divide", "transform_arg1" => n}), do: {{:divide, parse_number(n)}, nil}
-  defp parse_transform(%{"transform" => "offset", "transform_arg1" => n}), do: {{:offset, parse_number(n)}, nil}
+
+  defp parse_transform(%{"transform" => "moving_avg", "transform_arg1" => n}),
+    do: {nil, {:moving_avg, max(round(parse_number(n)), 2)}}
+
+  defp parse_transform(%{"transform" => "multiply", "transform_arg1" => n}),
+    do: {{:multiply, parse_number(n)}, nil}
+
+  defp parse_transform(%{"transform" => "divide", "transform_arg1" => n}),
+    do: {{:divide, parse_number(n)}, nil}
+
+  defp parse_transform(%{"transform" => "offset", "transform_arg1" => n}),
+    do: {{:offset, parse_number(n)}, nil}
+
   defp parse_transform(%{"transform" => "log10"}), do: {{:log10}, nil}
+
   defp parse_transform(%{"transform" => "scale", "transform_arg1" => m, "transform_arg2" => b}),
     do: {{:scale, parse_number(m), parse_number(b)}, nil}
+
   defp parse_transform(_), do: {nil, nil}
 
   defp parse_number(s) when is_binary(s) do
@@ -379,6 +425,7 @@ defmodule TimelessWebWeb.ExplorerLive do
       :error -> 1.0
     end
   end
+
   defp parse_number(_), do: 1.0
 
   defp apply_post_op(series, nil), do: series
@@ -532,10 +579,16 @@ defmodule TimelessWebWeb.ExplorerLive do
               <select name="transform" class="select select-sm select-bordered w-full">
                 <option value="none" selected={@form["transform"] == "none"}>None</option>
                 <option value="rate" selected={@form["transform"] == "rate"}>Rate (Δ/s)</option>
-                <option value="nn_rate" selected={@form["transform"] == "nn_rate"}>Rate NN (Δ/s, ≥0)</option>
+                <option value="nn_rate" selected={@form["transform"] == "nn_rate"}>
+                  Rate NN (Δ/s, ≥0)
+                </option>
                 <option value="delta" selected={@form["transform"] == "delta"}>Delta (Δ)</option>
-                <option value="moving_avg" selected={@form["transform"] == "moving_avg"}>Moving Avg</option>
-                <option value="multiply" selected={@form["transform"] == "multiply"}>Multiply (×n)</option>
+                <option value="moving_avg" selected={@form["transform"] == "moving_avg"}>
+                  Moving Avg
+                </option>
+                <option value="multiply" selected={@form["transform"] == "multiply"}>
+                  Multiply (×n)
+                </option>
                 <option value="divide" selected={@form["transform"] == "divide"}>Divide (÷n)</option>
                 <option value="offset" selected={@form["transform"] == "offset"}>Offset (+n)</option>
                 <option value="scale" selected={@form["transform"] == "scale"}>Scale (m×x+b)</option>
@@ -689,7 +742,8 @@ defmodule TimelessWebWeb.ExplorerLive do
       <%!-- Chart --%>
       <%= if @chart_mode == "js" do %>
         <div :if={@chart_data} class="card bg-base-200 border border-base-300 p-4 mb-6">
-          <div id="uplot-chart" phx-hook=".UPlotChart" data-chart={@chart_data} phx-update="ignore"></div>
+          <div id="uplot-chart" phx-hook=".UPlotChart" data-chart={@chart_data} phx-update="ignore">
+          </div>
         </div>
       <% else %>
         <div :if={@chart_svg} class="card bg-base-200 border border-base-300 p-4 mb-6">

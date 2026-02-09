@@ -165,7 +165,13 @@ defmodule TimelessWebWeb.AlertsLive do
           <button class="btn btn-sm btn-primary" phx-click="toggle_create_form">
             {if @show_create_form, do: "Cancel", else: "New Alert"}
           </button>
-          <select id="refresh-picker" class="select select-xs select-bordered" phx-change="set_refresh" phx-hook=".RefreshPicker" name="interval">
+          <select
+            id="refresh-picker"
+            class="select select-xs select-bordered"
+            phx-change="set_refresh"
+            phx-hook=".RefreshPicker"
+            name="interval"
+          >
             <option :for={s <- [5, 10, 30, 60]} value={s} selected={@refresh_seconds == s}>
               {s}s
             </option>

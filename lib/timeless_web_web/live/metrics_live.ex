@@ -107,7 +107,13 @@ defmodule TimelessWebWeb.MetricsLive do
       <.page_header title="Metrics">
         <:actions>
           <span class="text-xs text-base-content/50">{length(@all_metrics)} metrics</span>
-          <select id="refresh-picker" class="select select-xs select-bordered" phx-change="set_refresh" phx-hook=".RefreshPicker" name="interval">
+          <select
+            id="refresh-picker"
+            class="select select-xs select-bordered"
+            phx-change="set_refresh"
+            phx-hook=".RefreshPicker"
+            name="interval"
+          >
             <option :for={s <- [5, 10, 30, 60]} value={s} selected={@refresh_seconds == s}>
               {s}s
             </option>
