@@ -1,0 +1,145 @@
+<section class="hero-shell">
+  <div class="hero-copy">
+    <p class="eyebrow">Open source observability for Phoenix</p>
+    <h1>Persistent metrics, logs, and traces made easy.</h1>
+    <p class="hero-body">
+      Start by embedding observability directly into Phoenix with `timeless_phoenix`. Move to
+      a central deployment with `timeless_stack` when your architecture calls for it.
+    </p>
+    <div class="hero-actions">
+      <a
+        href="https://github.com/awksedgreep/timeless_phoenix"
+        class="button-link"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Explore `timeless_phoenix`
+      </a>
+      <.link navigate={~p"/dashboard"} class="button-link button-link-secondary">
+        Open public dashboard
+      </.link>
+      <.link navigate={~p"/projects"} class="button-link button-link-secondary">
+        View projects
+      </.link>
+    </div>
+  </div>
+
+  <aside class="hero-panel">
+    <div class="hero-panel-card terminal-panel">
+      <div class="terminal-bar">
+        <span></span><span></span><span></span>
+      </div>
+      <div class="terminal-copy">
+        <p><span>$</span> mix igniter.install timeless_phoenix</p>
+        <p><span>+</span> persistent metrics history</p>
+        <p><span>+</span> searchable logs</p>
+        <p><span>+</span> OpenTelemetry traces</p>
+        <p><span>+</span> dashboard mounted at /dashboard</p>
+      </div>
+    </div>
+  </aside>
+</section>
+
+<section class="band">
+  <div class="band-header">
+    <p class="eyebrow">Product shape</p>
+    <h2>Two ways to use the stack.</h2>
+  </div>
+
+  <div class="feature-grid">
+    <article class="feature-card">
+      <h3>Embed in Phoenix</h3>
+      <p>
+        `timeless_phoenix` keeps observability close to the application and extends
+        LiveDashboard with persistent history.
+      </p>
+    </article>
+    <article class="feature-card">
+      <h3>Push to a stack</h3>
+      <p>
+        `timeless_stack` is the path for teams that want shared infrastructure and a central
+        destination for telemetry.
+      </p>
+    </article>
+    <article class="feature-card">
+      <h3>Build in the open</h3>
+      <p>
+        This site is meant to support docs, projects, blog posts, and eventually a hosted UI
+        and cloud offering.
+      </p>
+    </article>
+  </div>
+</section>
+
+<section class="band">
+  <div class="band-header split">
+    <div>
+      <p class="eyebrow">Projects</p>
+      <h2>Core packages in the Timeless ecosystem.</h2>
+    </div>
+    <.link navigate={~p"/projects"} class="inline-link">All projects</.link>
+  </div>
+
+  <div class="content-grid">
+    <article :for={project <- @projects} class="story-card">
+      <div class="project-pill-row">
+        <span class={["project-pill", project_tone(project.slug)]}>{project.name}</span>
+        <span :if={project.featured} class="project-pill project-pill-accent">Featured</span>
+      </div>
+      <h3>{project.tagline}</h3>
+      <p>{project.summary}</p>
+      <div class="link-row">
+        <.link navigate={~p"/projects/#{project.slug}"} class="inline-link">Read more</.link>
+        <a
+          :if={project.repo_url}
+          href={project.repo_url}
+          class="inline-link"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Repo
+        </a>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section class="band">
+  <div class="band-header split">
+    <div>
+      <p class="eyebrow">Journal</p>
+      <h2>Notes from building the stack.</h2>
+    </div>
+    <.link navigate={~p"/blog"} class="inline-link">Open blog</.link>
+  </div>
+
+  <div class="content-grid">
+    <article :for={post <- @posts} class="story-card">
+      <div class="story-meta">
+        <span>{Calendar.strftime(post.published_on, "%b %-d, %Y")}</span>
+        <span :if={post.featured}>Featured</span>
+      </div>
+      <h3>{post.title}</h3>
+      <p>{post.summary}</p>
+      <.link navigate={~p"/blog/#{post.slug}"} class="inline-link">Read entry</.link>
+    </article>
+  </div>
+</section>
+
+<section class="cta-band">
+  <div>
+    <p class="eyebrow">Dashboard</p>
+    <h2>The site uses Timeless itself.</h2>
+    <p>
+      The public dashboard is intentionally open so the product can demonstrate itself while
+      chat and future community features remain behind auth.
+    </p>
+  </div>
+
+  <div class="hero-actions">
+    <.link navigate={~p"/dashboard"} class="button-link">Open dashboard</.link>
+    <.link navigate={~p"/users/register"} class="button-link button-link-secondary">
+      Create account
+    </.link>
+  </div>
+</section>

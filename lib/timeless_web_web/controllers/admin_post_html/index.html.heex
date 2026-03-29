@@ -1,0 +1,41 @@
+<section class="page-shell admin-shell">
+  <div class="page-header">
+    <p class="eyebrow">Admin</p>
+    <h1>Manage posts.</h1>
+    <p>Write, revise, and retire blog entries from one place.</p>
+    <div class="link-row">
+      <.link navigate={~p"/admin"} class="inline-link">Back to admin</.link>
+      <.link navigate={~p"/admin/posts/new"} class="button-link button-link-secondary">
+        New post
+      </.link>
+    </div>
+  </div>
+
+  <section class="admin-section">
+    <div class="admin-list">
+      <article :for={post <- @posts} class="admin-row">
+        <div>
+          <div class="project-pill-row">
+            <span class="project-pill">{Calendar.strftime(post.published_on, "%b %-d, %Y")}</span>
+            <span :if={post.featured} class="project-pill project-pill-accent">Featured</span>
+          </div>
+          <h3>{post.title}</h3>
+          <p>{post.summary}</p>
+        </div>
+
+        <div class="link-row">
+          <.link navigate={~p"/blog/#{post.slug}"} class="inline-link">View</.link>
+          <.link navigate={~p"/admin/posts/#{post.id}/edit"} class="inline-link">Edit</.link>
+          <.link
+            href={~p"/admin/posts/#{post.id}"}
+            method="delete"
+            data-confirm="Delete this post?"
+            class="inline-link"
+          >
+            Delete
+          </.link>
+        </div>
+      </article>
+    </div>
+  </section>
+</section>

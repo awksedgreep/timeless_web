@@ -1,0 +1,68 @@
+<section class="page-shell admin-shell">
+  <div class="page-header">
+    <p class="eyebrow">Admin</p>
+    <h1>Content and project controls.</h1>
+    <p>
+      Manage blog entries and project records without leaving the site. This is intentionally
+      simple for now.
+    </p>
+  </div>
+
+  <div class="admin-grid">
+    <section class="admin-section">
+      <div class="band-header split">
+        <div>
+          <p class="eyebrow">Posts</p>
+          <h2>Recent journal entries</h2>
+        </div>
+        <.link navigate={~p"/admin/posts/new"} class="button-link button-link-secondary">
+          New post
+        </.link>
+      </div>
+
+      <div class="admin-list">
+        <article :for={post <- @posts} class="admin-row">
+          <div>
+            <p class="admin-kicker">{Calendar.strftime(post.published_on, "%b %-d, %Y")}</p>
+            <h3>{post.title}</h3>
+            <p>{post.summary}</p>
+          </div>
+          <div class="link-row">
+            <.link navigate={~p"/blog/#{post.slug}"} class="inline-link">View</.link>
+            <.link navigate={~p"/admin/posts/#{post.id}/edit"} class="inline-link">Edit</.link>
+            <.link navigate={~p"/admin/posts"} class="inline-link">All posts</.link>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="admin-section">
+      <div class="band-header split">
+        <div>
+          <p class="eyebrow">Projects</p>
+          <h2>Current stack records</h2>
+        </div>
+        <.link navigate={~p"/admin/projects/new"} class="button-link button-link-secondary">
+          New project
+        </.link>
+      </div>
+
+      <div class="admin-list">
+        <article :for={project <- @projects} class="admin-row">
+          <div>
+            <p class="admin-kicker">{project.slug}</p>
+            <h3>{project.name}</h3>
+            <p>{project.summary}</p>
+          </div>
+          <div class="link-row">
+            <.link navigate={~p"/projects/#{project.slug}"} class="inline-link">View</.link>
+            <.link navigate={~p"/admin/projects/#{project.id}/edit"} class="inline-link">
+              Edit
+            </.link>
+            <.link navigate={~p"/admin/projects"} class="inline-link">All projects</.link>
+          </div>
+        </article>
+      </div>
+    </section>
+  </div>
+</section>

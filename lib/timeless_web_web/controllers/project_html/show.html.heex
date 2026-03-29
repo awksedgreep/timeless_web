@@ -1,0 +1,47 @@
+<article class="page-shell article-shell">
+  <.link navigate={~p"/projects"} class="inline-link">Back to projects</.link>
+
+  <header class="article-header">
+    <p class="eyebrow">Project</p>
+    <h1>{@project.name}</h1>
+    <p>{@project.tagline}</p>
+    <div class="link-row">
+      <a
+        :if={@project.repo_url}
+        href={@project.repo_url}
+        class="button-link"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Source
+      </a>
+      <a
+        :if={@project.docs_url}
+        href={@project.docs_url}
+        class="button-link button-link-muted"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Documentation
+      </a>
+      <a
+        :if={@project.product_url}
+        href={@project.product_url}
+        class="button-link button-link-muted"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Live product
+      </a>
+      <.link
+        :if={@current_scope && @current_scope.user && @current_scope.user.is_admin}
+        navigate={~p"/admin/projects/#{@project.id}/edit"}
+        class="button-link button-link-secondary"
+      >
+        Edit project
+      </.link>
+    </div>
+  </header>
+
+  <div class="markdown-body">{markdown(@project.description_md)}</div>
+</article>

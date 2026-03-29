@@ -1,0 +1,39 @@
+<section class="page-shell admin-shell">
+  <div class="page-header">
+    <p class="eyebrow">Admin</p>
+    <h1>{@page_title}</h1>
+    <p class="admin-form-copy">
+      Posts are rendered directly from markdown and published immediately after save.
+    </p>
+    <div class="link-row">
+      <.link navigate={~p"/admin/posts"} class="inline-link">Back to posts</.link>
+      <.link :if={assigns[:post]} navigate={~p"/blog/#{@post.slug}"} class="inline-link">
+        View post
+      </.link>
+    </div>
+  </div>
+
+  <section class="admin-form">
+    <.form
+      :let={f}
+      for={@form}
+      action={@action}
+      method={if assigns[:post], do: "put", else: "post"}
+      class="admin-form-grid"
+    >
+      <.input field={f[:title]} type="text" label="Title" required />
+      <.input field={f[:slug]} type="text" label="Slug" required />
+      <.input field={f[:published_on]} type="date" label="Published on" required />
+      <.input field={f[:summary]} type="textarea" label="Summary" rows="4" required />
+      <.input field={f[:body_md]} type="textarea" label="Body (Markdown)" rows="18" required />
+      <.input field={f[:featured]} type="checkbox" label="Featured" />
+
+      <div class="admin-form-actions">
+        <.button variant="primary">Save post</.button>
+        <.link navigate={~p"/admin/posts"} class="button-link button-link-secondary">
+          Cancel
+        </.link>
+      </div>
+    </.form>
+  </section>
+</section>

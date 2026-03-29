@@ -1,0 +1,60 @@
+<section class="page-shell">
+  <div class="page-header">
+    <p class="eyebrow">Projects</p>
+    <h1>The pieces of the Timeless stack.</h1>
+    <p>
+      Start embedded inside a Phoenix app with `timeless_phoenix`, or ship metrics to a
+      central deployment with `timeless_stack`.
+    </p>
+    <div
+      :if={@current_scope && @current_scope.user && @current_scope.user.is_admin}
+      class="link-row"
+    >
+      <.link navigate={~p"/admin/projects/new"} class="button-link button-link-secondary">
+        New project
+      </.link>
+      <.link navigate={~p"/admin/projects"} class="inline-link">Manage projects</.link>
+    </div>
+  </div>
+
+  <div class="content-grid">
+    <article :for={project <- @projects} class="story-card">
+      <div class="project-pill-row">
+        <span class={["project-pill", project_tone(project.slug)]}>{project.name}</span>
+        <span :if={project.featured} class="project-pill project-pill-accent">Core</span>
+      </div>
+      <h2>
+        <.link navigate={~p"/projects/#{project.slug}"}>{project.tagline}</.link>
+      </h2>
+      <p>{project.summary}</p>
+      <div class="link-row">
+        <.link navigate={~p"/projects/#{project.slug}"} class="inline-link">Details</.link>
+        <.link
+          :if={@current_scope && @current_scope.user && @current_scope.user.is_admin}
+          navigate={~p"/admin/projects/#{project.id}/edit"}
+          class="inline-link"
+        >
+          Edit
+        </.link>
+        <a
+          :if={project.repo_url}
+          href={project.repo_url}
+          class="inline-link"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Repo
+        </a>
+        <a
+          :if={project.docs_url}
+          href={project.docs_url}
+          class="inline-link"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Docs
+        </a>
+      </div>
+    </article>
+  </div>
+</section>

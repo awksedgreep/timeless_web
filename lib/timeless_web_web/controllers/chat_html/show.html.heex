@@ -1,0 +1,22 @@
+<section class="page-shell">
+  <div class="page-header">
+    <p class="eyebrow">Community Chat</p>
+    <h1>The members-only room is reserved for logged-in builders.</h1>
+    <p>
+      This first pass keeps chat behind auth while the public-facing site, docs, and
+      observability dashboard stay open. We can turn this into a real LiveView room next.
+    </p>
+  </div>
+
+  <div class="story-card">
+    <h2>Planned shape</h2>
+    <p>
+      Authenticated discussion, lightweight moderation, direct links back to docs and repo
+      issues, and the option to surface live product health from the open dashboard.
+    </p>
+    <div class="link-row">
+      <.link navigate={~p"/dashboard"} class="inline-link">Open dashboard</.link>
+      <.link navigate={~p"/projects"} class="inline-link">Browse projects</.link>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,43 @@
+<section class="page-shell admin-shell">
+  <div class="page-header">
+    <p class="eyebrow">Admin</p>
+    <h1>Manage projects.</h1>
+    <p>Keep repos, docs, and product links current without touching the seed file.</p>
+    <div class="link-row">
+      <.link navigate={~p"/admin"} class="inline-link">Back to admin</.link>
+      <.link navigate={~p"/admin/projects/new"} class="button-link button-link-secondary">
+        New project
+      </.link>
+    </div>
+  </div>
+
+  <section class="admin-section">
+    <div class="admin-list">
+      <article :for={project <- @projects} class="admin-row">
+        <div>
+          <div class="project-pill-row">
+            <span class={["project-pill", project_tone(project.slug)]}>{project.name}</span>
+            <span :if={project.featured} class="project-pill project-pill-accent">Core</span>
+          </div>
+          <h3>{project.tagline}</h3>
+          <p>{project.summary}</p>
+        </div>
+
+        <div class="link-row">
+          <.link navigate={~p"/projects/#{project.slug}"} class="inline-link">View</.link>
+          <.link navigate={~p"/admin/projects/#{project.id}/edit"} class="inline-link">
+            Edit
+          </.link>
+          <.link
+            href={~p"/admin/projects/#{project.id}"}
+            method="delete"
+            data-confirm="Delete this project?"
+            class="inline-link"
+          >
+            Delete
+          </.link>
+        </div>
+      </article>
+    </div>
+  </section>
+</section>

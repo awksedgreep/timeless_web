@@ -1,0 +1,26 @@
+<article class="page-shell article-shell">
+  <.link navigate={~p"/blog"} class="inline-link">Back to journal</.link>
+
+  <header class="article-header">
+    <p class="eyebrow">Journal</p>
+    <h1>{@post.title}</h1>
+    <p>{@post.summary}</p>
+    <div class="story-meta">
+      <span>{Calendar.strftime(@post.published_on, "%B %-d, %Y")}</span>
+      <span :if={@post.featured}>Featured</span>
+    </div>
+    <div
+      :if={@current_scope && @current_scope.user && @current_scope.user.is_admin}
+      class="link-row"
+    >
+      <.link
+        navigate={~p"/admin/posts/#{@post.id}/edit"}
+        class="button-link button-link-secondary"
+      >
+        Edit post
+      </.link>
+    </div>
+  </header>
+
+  <div class="markdown-body">{markdown(@post.body_md)}</div>
+</article>

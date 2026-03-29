@@ -1,0 +1,63 @@
+<section class="page-shell chat-shell">
+  <div class="page-header">
+    <p class="eyebrow">Community Chat</p>
+    <h1>Community chat.</h1>
+    <p>
+      A small authenticated room for people using Timeless, exploring the stack, and sharing
+      questions, feedback, and ideas.
+    </p>
+    <div class="link-row">
+      <span class="project-pill">{@current_user.email}</span>
+      <.link navigate={~p"/dashboard"} class="inline-link">Open dashboard</.link>
+      <.link navigate={~p"/projects"} class="inline-link">Browse projects</.link>
+    </div>
+  </div>
+
+  <div class="chat-layout">
+    <section class="chat-panel">
+      <div class="band-header">
+        <p class="eyebrow">Lobby</p>
+        <h2>Recent messages</h2>
+      </div>
+
+      <div id="chat-messages" class="chat-messages">
+        <article :for={message <- @messages} class="chat-message">
+          <div class="chat-message-meta">
+            <span class="project-pill">{message.user.email}</span>
+            <span>{Calendar.strftime(message.inserted_at, "%b %-d, %Y %H:%M")}</span>
+          </div>
+          <p>{message.body}</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="chat-panel">
+      <div class="band-header">
+        <p class="eyebrow">Post</p>
+        <h2>Join the conversation</h2>
+      </div>
+
+      <.form
+        :let={f}
+        for={@message_form}
+        id="chat-message-form"
+        phx-submit="send_message"
+        class="chat-form"
+      >
+        <.input
+          field={f[:body]}
+          type="textarea"
+          label="Message"
+          rows="8"
+          maxlength="1000"
+          placeholder="Ask a question, share feedback, or start a conversation."
+          required
+        />
+
+        <div class="admin-form-actions">
+          <.button variant="primary" phx-disable-with="Sending...">Send message</.button>
+        </div>
+      </.form>
+    </section>
+  </div>
+</section>

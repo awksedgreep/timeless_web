@@ -1,0 +1,42 @@
+<section class="page-shell">
+  <div class="page-header">
+    <p class="eyebrow">Journal</p>
+    <h1>Notes from building a durable observability stack.</h1>
+    <p>
+      Product updates, architecture decisions, and practical field notes from shipping
+      metrics, logs, and traces in Elixir.
+    </p>
+    <div
+      :if={@current_scope && @current_scope.user && @current_scope.user.is_admin}
+      class="link-row"
+    >
+      <.link navigate={~p"/admin/posts/new"} class="button-link button-link-secondary">
+        New post
+      </.link>
+      <.link navigate={~p"/admin/posts"} class="inline-link">Manage posts</.link>
+    </div>
+  </div>
+
+  <div class="content-grid">
+    <article :for={post <- @posts} class="story-card">
+      <div class="story-meta">
+        <span>{Calendar.strftime(post.published_on, "%b %-d, %Y")}</span>
+        <span :if={post.featured}>Featured</span>
+      </div>
+      <h2>
+        <.link navigate={~p"/blog/#{post.slug}"}>{post.title}</.link>
+      </h2>
+      <p>{post.summary}</p>
+      <div class="link-row">
+        <.link navigate={~p"/blog/#{post.slug}"} class="inline-link">Read article</.link>
+        <.link
+          :if={@current_scope && @current_scope.user && @current_scope.user.is_admin}
+          navigate={~p"/admin/posts/#{post.id}/edit"}
+          class="inline-link"
+        >
+          Edit
+        </.link>
+      </div>
+    </article>
+  </div>
+</section>

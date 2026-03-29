@@ -1,0 +1,49 @@
+<section class="page-shell admin-shell">
+  <div class="page-header">
+    <p class="eyebrow">Admin</p>
+    <h1>{@page_title}</h1>
+    <p class="admin-form-copy">
+      Project records drive the public projects pages, links, and summary cards.
+    </p>
+    <div class="link-row">
+      <.link navigate={~p"/admin/projects"} class="inline-link">Back to projects</.link>
+      <.link :if={assigns[:project]} navigate={~p"/projects/#{@project.slug}"} class="inline-link">
+        View project
+      </.link>
+    </div>
+  </div>
+
+  <section class="admin-form">
+    <.form
+      :let={f}
+      for={@form}
+      action={@action}
+      method={if assigns[:project], do: "put", else: "post"}
+      class="admin-form-grid"
+    >
+      <.input field={f[:name]} type="text" label="Name" required />
+      <.input field={f[:slug]} type="text" label="Slug" required />
+      <.input field={f[:tagline]} type="text" label="Tagline" required />
+      <.input field={f[:summary]} type="textarea" label="Summary" rows="4" required />
+      <.input
+        field={f[:description_md]}
+        type="textarea"
+        label="Description (Markdown)"
+        rows="14"
+        required
+      />
+      <.input field={f[:repo_url]} type="url" label="Repo URL" />
+      <.input field={f[:docs_url]} type="url" label="Docs URL" />
+      <.input field={f[:product_url]} type="url" label="Product URL" />
+      <.input field={f[:sort_order]} type="number" label="Sort order" />
+      <.input field={f[:featured]} type="checkbox" label="Featured" />
+
+      <div class="admin-form-actions">
+        <.button variant="primary">Save project</.button>
+        <.link navigate={~p"/admin/projects"} class="button-link button-link-secondary">
+          Cancel
+        </.link>
+      </div>
+    </.form>
+  </section>
+</section>
