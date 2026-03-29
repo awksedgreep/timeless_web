@@ -2,4 +2,4 @@
 set -eu
 
 cd -P -- "$(dirname -- "$0")"
-exec ./timeless_web eval 'TimelessWeb.Release.migrate(); TimelessWeb.Release.seed_admin()'
+exec ./timeless_web eval 'TimelessWeb.Release.migrate(); TimelessWeb.Release.seed()'
