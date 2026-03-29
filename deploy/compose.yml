@@ -4,6 +4,8 @@ services:
       context: ..
       dockerfile: Dockerfile
     restart: unless-stopped
+    ports:
+      - "127.0.0.1:5880:5880"
     environment:
       PHX_SERVER: "true"
       PHX_HOST: "${PHX_HOST:?set PHX_HOST}"
@@ -13,23 +15,5 @@ services:
     volumes:
       - db_data:/data
 
-  caddy:
-    image: docker.io/caddy:2-alpine
-    restart: unless-stopped
-    ports:
-      - "80:80"
-      - "443:443"
-      - "443:443/udp"
-    environment:
-      PHX_HOST: "${PHX_HOST:?set PHX_HOST}"
-    volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile:ro
-      - caddy_data:/data
-      - caddy_config:/config
-    depends_on:
-      - app
-
 volumes:
   db_data:
-  caddy_data:
-  caddy_config:
