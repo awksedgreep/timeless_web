@@ -6,8 +6,8 @@ RequiresMountsFor=%t/containers
 
 [Service]
 Type=simple
-WorkingDirectory=/opt/timeless-web/deploy
-EnvironmentFile=/opt/timeless-web/deploy/.env
+WorkingDirectory=/opt/timeless_web/deploy
+EnvironmentFile=/opt/timeless_web/deploy/.env
 ExecStartPre=/usr/bin/podman-compose down --remove-orphans
 ExecStart=/usr/bin/podman-compose up
 ExecStop=/usr/bin/podman-compose down
