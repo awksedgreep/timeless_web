@@ -17,13 +17,13 @@ sudo apt update && sudo apt install -y caddy podman podman-compose
 ## 2. Clone the repo
 
 ```bash
-sudo git clone https://github.com/awksedgreep/timeless_web.git /opt/timeless-web
+sudo git clone https://github.com/awksedgreep/timeless_web.git /opt/timeless_web
 ```
 
 ## 3. Configure the app
 
 ```bash
-cd /opt/timeless-web/deploy
+cd /opt/timeless_web/deploy
 sudo cp .env.example .env
 sudo vi .env
 ```
@@ -35,14 +35,14 @@ Set both values:
 ## 4. Build and start the app
 
 ```bash
-cd /opt/timeless-web/deploy
+cd /opt/timeless_web/deploy
 sudo podman-compose up -d --build
 ```
 
 ## 5. Set up Caddy
 
 ```bash
-sudo cp /opt/timeless-web/deploy/Caddyfile /etc/caddy/Caddyfile
+sudo cp /opt/timeless_web/deploy/Caddyfile /etc/caddy/Caddyfile
 sudo systemctl reload caddy
 ```
 
@@ -51,7 +51,7 @@ Caddy automatically provisions a TLS certificate from Let's Encrypt and redirect
 ## 6. Enable the app service
 
 ```bash
-sudo cp /opt/timeless-web/deploy/timeless-web.service /etc/systemd/system/
+sudo cp /opt/timeless_web/deploy/timeless-web.service /etc/systemd/system/
 sudo systemctl daemon-reload
 sudo systemctl enable --now timeless-web
 ```
@@ -68,12 +68,12 @@ sudo journalctl -u timeless-web -f
 sudo journalctl -u caddy -f
 
 # Restart after pulling updates
-cd /opt/timeless-web
+cd /opt/timeless_web
 sudo git pull
 sudo systemctl restart timeless-web
 
 # Rebuild from scratch
-cd /opt/timeless-web/deploy
+cd /opt/timeless_web/deploy
 sudo podman-compose down
 sudo podman-compose up -d --build
 ```
