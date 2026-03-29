@@ -33,13 +33,25 @@ defmodule TimelessWebWeb.Layouts do
       <header class="site-header">
         <.link navigate={~p"/"} class="brand-mark" aria-label="Timeless home">
           <img src={~p"/images/logo-light.svg"} alt="Timeless" class="brand-logo brand-logo-light" />
-          <img src={~p"/images/logo-dark.svg"} alt="Timeless" class="brand-logo brand-logo-dark" />
+          <svg class="brand-logo brand-logo-dark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 34" aria-label="Timeless">
+            <defs>
+              <linearGradient id="nav-logo-grad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#c4b5fd"/>
+                <stop offset="50%" stop-color="#6366f1"/>
+                <stop offset="100%" stop-color="#a78bfa"/>
+              </linearGradient>
+            </defs>
+            <g transform="translate(1, 3) scale(1.5)">
+              <path d="M8 2C4.5 2 2 4.7 2 8s2.5 6 6 6c2.2 0 4-1.2 5.5-3L14 10.5l.5.5c1.5 1.8 3.3 3 5.5 3 3.5 0 6-2.7 6-6s-2.5-6-6-6c-2.2 0-4 1.2-5.5 3L14 5.5 13.5 5C12 3.2 10.2 2 8 2z" fill="none" stroke="url(#nav-logo-grad)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </g>
+            <text x="48" y="25" font-family="'Trebuchet MS', Helvetica, Arial, sans-serif" font-size="26" font-weight="700" fill="#ffffff" letter-spacing="5">TIMELESS</text>
+          </svg>
         </.link>
 
         <nav class="site-nav" aria-label="Primary">
           <.link navigate={~p"/projects"}>Projects</.link>
           <.link navigate={~p"/blog"}>Blog</.link>
-          <.link navigate={~p"/dashboard"}>Dashboard</.link>
+          <a href={~p"/dashboard"} target="_blank">Dashboard</a>
           <%= if @current_scope do %>
             <.link navigate={~p"/chat"}>Chat</.link>
           <% end %>
@@ -74,6 +86,10 @@ defmodule TimelessWebWeb.Layouts do
       </main>
 
       <footer class="site-footer">
+        <svg class="footer-watermark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 16" aria-hidden="true">
+          <path d="M8 2C4.5 2 2 4.7 2 8s2.5 6 6 6c2.2 0 4-1.2 5.5-3L14 10.5l.5.5c1.5 1.8 3.3 3 5.5 3 3.5 0 6-2.7 6-6s-2.5-6-6-6c-2.2 0-4 1.2-5.5 3L14 5.5 13.5 5C12 3.2 10.2 2 8 2z"
+            fill="none" stroke="rgba(99,102,241,0.06)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
         <div>
           <p class="footer-label">Built with Timeless</p>
           <p>Public docs and product context in front. Real dashboard running behind it.</p>

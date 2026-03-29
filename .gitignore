@@ -39,3 +39,8 @@ npm-debug.log
 *.db
 *.db-*
 
+# Runtime observability/demo data
+/priv/observability/
+
+# Local Codex instructions
+AGENTS.md
