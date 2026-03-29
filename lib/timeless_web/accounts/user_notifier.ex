@@ -9,7 +9,7 @@ defmodule TimelessWeb.Accounts.UserNotifier do
     email =
       new()
       |> to(recipient)
-      |> from({"TimelessWeb", "contact@example.com"})
+      |> from({"Timeless", "noreply@timelessmetrics.com"})
       |> subject(subject)
       |> text_body(body)
 

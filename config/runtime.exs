@@ -61,7 +61,7 @@ if config_env() == :prod do
       You can generate one by calling: mix phx.gen.secret
       """
 
-  host = System.get_env("PHX_HOST") || "example.com"
+  host = System.get_env("PHX_HOST") || "timelessmetrics.com"
   port = String.to_integer(System.get_env("PORT") || "5880")
   bind_ip = parse_ip.(System.get_env("PHX_IP") || "127.0.0.1")
 
