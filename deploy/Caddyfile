@@ -1,0 +1,3 @@
+{$PHX_HOST:localhost} {
+	reverse_proxy app:5880
+}

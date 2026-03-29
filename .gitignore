@@ -44,3 +44,6 @@ npm-debug.log
 
 # Local Codex instructions
 AGENTS.md
+
+# Deploy secrets
+deploy/.env

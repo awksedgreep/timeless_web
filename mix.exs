@@ -63,7 +63,7 @@ defmodule TimelessWeb.MixProject do
       {:req, "~> 0.5"},
       {:telemetry_metrics, "~> 1.0"},
       {:telemetry_poller, "~> 1.0"},
-      {:timeless_phoenix, path: "../timeless_phoenix"},
+      {:timeless_phoenix, "~> 1.5"},
       {:earmark, "~> 1.4"},
       {:gettext, "~> 1.0"},
       {:jason, "~> 1.2"},
