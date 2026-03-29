@@ -28,8 +28,7 @@ defmodule TimelessWeb.Application do
        ]},
       {DNSCluster, query: Application.get_env(:timeless_web, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: TimelessWeb.PubSub},
-      # Start a worker by calling: TimelessWeb.Worker.start_link(arg)
-      # {TimelessWeb.Worker, arg},
+      TimelessWeb.Chat.Notifier,
       # Start to serve requests, typically the last entry
       TimelessWebWeb.Endpoint
     ]

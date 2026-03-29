@@ -36,6 +36,7 @@ defmodule TimelessWeb.Chat do
       {:ok, message} ->
         message = Repo.preload(message, :user)
         Phoenix.PubSub.broadcast(TimelessWeb.PubSub, @topic, {:message_created, message})
+        unless user.is_admin, do: TimelessWeb.Chat.Notifier.message_created(message)
         {:ok, message}
 
       error ->

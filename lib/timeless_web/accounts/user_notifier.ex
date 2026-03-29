@@ -65,6 +65,29 @@ defmodule TimelessWeb.Accounts.UserNotifier do
     """)
   end
 
+  @doc """
+  Deliver a chat message digest to the admin.
+  """
+  def deliver_chat_digest(email, count, body) do
+    subject =
+      if count == 1,
+        do: "1 new chat message on Timeless",
+        else: "#{count} new chat messages on Timeless"
+
+    deliver(email, subject, """
+
+    ==============================
+
+    You have #{count} new chat message#{if count > 1, do: "s", else: ""} on Timeless:
+
+    #{body}
+
+    View the conversation at https://timelessmetrics.com/chat
+
+    ==============================
+    """)
+  end
+
   defp deliver_confirmation_instructions(user, url) do
     deliver(user.email, "Confirmation instructions", """
 

@@ -3,13 +3,16 @@ defmodule TimelessWebWeb.ChatLive do
 
   alias TimelessWeb.Accounts
   alias TimelessWeb.Chat
-  alias TimelessWeb.Chat.Message
+  alias TimelessWeb.Chat.{Message, Notifier}
 
   @impl true
   def mount(_params, %{"user_token" => user_token}, socket) do
     case Accounts.get_user_by_session_token(user_token) do
       {user, _token_inserted_at} ->
-        if connected?(socket), do: Chat.subscribe()
+        if connected?(socket) do
+          Chat.subscribe()
+          if user.is_admin, do: Notifier.admin_joined()
+        end
 
         {:ok,
          socket
@@ -19,6 +22,13 @@ defmodule TimelessWebWeb.ChatLive do
 
       nil ->
         {:ok, redirect(socket, to: ~p"/users/log-in")}
+    end
+  end
+
+  @impl true
+  def terminate(_reason, socket) do
+    if socket.assigns[:current_user] && socket.assigns.current_user.is_admin do
+      Notifier.admin_left()
     end
   end
 

@@ -13,6 +13,15 @@ defmodule TimelessWeb.Release do
     end
   end
 
+  def seed_admin do
+    load_app()
+
+    {:ok, _, _} =
+      Ecto.Migrator.with_repo(TimelessWeb.Repo, fn _repo ->
+        TimelessWeb.Accounts.promote_user_to_admin("mark.cotner@diablodata.com")
+      end)
+  end
+
   def rollback(repo, version) do
     load_app()
     {:ok, _, _} = Ecto.Migrator.with_repo(repo, &Ecto.Migrator.run(&1, :down, to: version))
