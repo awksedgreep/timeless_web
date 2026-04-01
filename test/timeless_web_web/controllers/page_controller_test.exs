@@ -4,6 +4,6 @@ defmodule TimelessWebWeb.PageControllerTest do
   test "GET /", %{conn: conn} do
     conn = get(conn, ~p"/")
 
-    assert html_response(conn, 200) =~ "Persistent metrics, logs, and traces made easy."
+    assert html_response(conn, 200) =~ "Embedded observability for Elixir &amp; Phoenix"
   end
 end
