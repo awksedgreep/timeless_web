@@ -34,6 +34,9 @@ if System.get_env("PHX_SERVER") do
   config :timeless_web, TimelessWebWeb.Endpoint, server: true
 end
 
+config :timeless_web,
+  observability_data_dir: System.get_env("OBSERVABILITY_DATA_DIR", "priv/observability")
+
 config :timeless_web, TimelessWebWeb.Endpoint,
   http: [port: String.to_integer(System.get_env("PORT", "4000"))]
 

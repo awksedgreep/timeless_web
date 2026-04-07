@@ -7,24 +7,25 @@ defmodule TimelessWeb.Application do
 
   @impl true
   def start(_type, _args) do
+    observability_data_dir =
+      Application.get_env(:timeless_web, :observability_data_dir, "priv/observability")
+
     children = [
       TimelessWebWeb.Telemetry,
       TimelessWeb.Repo,
       {Ecto.Migrator,
        repos: Application.fetch_env!(:timeless_web, :ecto_repos), skip: skip_migrations?()},
       {TimelessPhoenix,
-       data_dir: "priv/observability",
+       data_dir: observability_data_dir,
        timeless: [
          raw_retention_seconds: 14 * 86_400,
          daily_retention_seconds: 365 * 86_400
        ],
        timeless_logs: [
-         retention_max_age: 7 * 86_400,
-         retention_max_size: 256 * 1_048_576
+         retention_max_age: 7 * 86_400
        ],
        timeless_traces: [
-         retention_max_age: 7 * 86_400,
-         retention_max_size: 256 * 1_048_576
+         retention_max_age: 7 * 86_400
        ]},
       {DNSCluster, query: Application.get_env(:timeless_web, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: TimelessWeb.PubSub},

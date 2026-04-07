@@ -11,11 +11,16 @@ services:
       PHX_HOST: "${PHX_HOST:?set PHX_HOST}"
       SECRET_KEY_BASE: "${SECRET_KEY_BASE:?set SECRET_KEY_BASE}"
       DATABASE_PATH: /data/timeless_web.db
+      OBSERVABILITY_DATA_DIR: /observability
       PORT: "5880"
       PHX_IP: "0.0.0.0"
       RESEND_API_KEY: "${RESEND_API_KEY:?set RESEND_API_KEY}"
     volumes:
       - db_data:/data
+      - observability_data:/observability
 
 volumes:
   db_data:
+    name: timeless_web_db_data
+  observability_data:
+    name: timeless_web_observability_data

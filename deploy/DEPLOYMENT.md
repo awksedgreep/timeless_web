@@ -39,6 +39,13 @@ cd /opt/timeless_web/deploy
 sudo podman-compose up -d --build
 ```
 
+The deployment uses two named Podman volumes with fixed names:
+- `timeless_web_db_data` for the SQLite database
+- `timeless_web_observability_data` for Timeless metrics, logs, and traces
+
+Those volumes survive container rebuilds and `podman-compose down`. Do not use
+`podman-compose down -v` unless you intentionally want to delete persistent data.
+
 ## 5. Set up Caddy
 
 ```bash
@@ -70,10 +77,21 @@ sudo journalctl -u caddy -f
 # Restart after pulling updates
 cd /opt/timeless_web
 sudo git pull
+sudo podman volume ls | grep timeless_web
+cd /opt/timeless_web/deploy
 sudo systemctl restart timeless-web
 
 # Rebuild from scratch
 cd /opt/timeless_web/deploy
 sudo podman-compose down
 sudo podman-compose up -d --build
+```
+
+## Backups
+
+Before major upgrades, archive the named volumes:
+
+```bash
+sudo tar -C /var/lib/containers/storage/volumes/timeless_web_db_data/_data -cf timeless_web_db_data.tar .
+sudo tar -C /var/lib/containers/storage/volumes/timeless_web_observability_data/_data -cf timeless_web_observability_data.tar .
 ```

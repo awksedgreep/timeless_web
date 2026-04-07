@@ -83,7 +83,7 @@ ENV LANGUAGE=en_US:en
 ENV LC_ALL=en_US.UTF-8
 
 WORKDIR "/app"
-RUN mkdir -p /data && chown nobody:root /app /data
+RUN mkdir -p /data /observability && chown nobody:root /app /data /observability
 
 # set runner ENV
 ENV MIX_ENV="prod"
