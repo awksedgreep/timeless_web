@@ -4,7 +4,7 @@ defmodule TimelessWeb.MixProject do
   def project do
     [
       app: :timeless_web,
-      version: "0.2.8",
+      version: "0.2.9",
       elixir: "~> 1.15",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
@@ -64,6 +64,7 @@ defmodule TimelessWeb.MixProject do
       {:telemetry_metrics, "~> 1.0"},
       {:telemetry_poller, "~> 1.0"},
       {:timeless_phoenix, "~> 1.5"},
+      {:timeless_metrics_dashboard, "~> 0.4.5"},
       {:earmark, "~> 1.4"},
       {:gettext, "~> 1.0"},
       {:jason, "~> 1.2"},
