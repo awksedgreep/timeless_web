@@ -63,7 +63,8 @@ defmodule TimelessWeb.MixProject do
       {:req, "~> 0.5"},
       {:telemetry_metrics, "~> 1.0"},
       {:telemetry_poller, "~> 1.0"},
-      {:timeless_phoenix, "~> 1.5"},
+      # Tag-pinned during the 2.0 dogfood soak; revert to {:timeless_phoenix, "~> 2.0"} once published to hex.
+      {:timeless_phoenix, github: "awksedgreep/timeless_phoenix", tag: "v2.0.0"},
       {:timeless_metrics_dashboard, "~> 0.4.5"},
       {:earmark, "~> 1.4"},
       {:gettext, "~> 1.0"},
