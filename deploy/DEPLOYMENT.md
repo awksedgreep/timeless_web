@@ -63,6 +63,49 @@ sudo systemctl daemon-reload
 sudo systemctl enable --now timeless-web
 ```
 
+## Deploying an update
+
+This is the one canonical procedure — do not improvise variants. Two facts
+make the obvious shortcuts fail:
+
+- `systemctl restart timeless-web` alone does NOT deploy new code. The unit
+  runs `podman-compose down` + `up` with no `--build`, so it restarts the
+  old image.
+- `podman-compose up -d --build` alone does NOT replace the running
+  container. podman-compose builds the image, then fails with
+  `container name "deploy_app_1" is already in use`.
+
+The working flow builds first (the old app keeps serving during the build),
+then lets the systemd unit do the swap, so systemd stays the container's
+owner. Never run `podman-compose up`/`down` by hand while the unit is
+active — the unit's foreground `up` exits when the containers go away and
+the service drops to `inactive`, leaving the next container unmanaged.
+
+```bash
+# 1. On your machine: bump deps in mix.exs, mix deps.update <pkgs>,
+#    mix test, commit, push to main.
+
+# 2. On the server:
+cd /opt/timeless_web && sudo git pull --ff-only
+cd deploy && sudo podman-compose build   # old app still serving
+sudo systemctl restart timeless-web      # unit swaps to the fresh image
+
+# 3. Verify:
+sudo systemctl is-active timeless-web    # active
+sudo podman ps                           # deploy_app_1 Up
+sudo podman logs deploy_app_1 | grep -E "extension|Running"
+curl -s -o /dev/null -w '%{http_code}\n' http://localhost:5880/       # 200
+curl -s -o /dev/null -w '%{http_code}\n' https://timelessmetrics.com/ # 200
+```
+
+Optional deeper check — engine stats on the live node (raw blocks should
+trend to 0 within a couple minutes as auto-optimize drains any backlog):
+
+```bash
+sudo podman exec deploy_app_1 /app/bin/timeless_web rpc \
+  'TimelessLogs.LibsqlEngine.stats() |> IO.inspect()'
+```
+
 ## Managing the deployment
 
 ```bash
@@ -73,18 +116,6 @@ sudo systemctl status caddy
 # Logs
 sudo journalctl -u timeless-web -f
 sudo journalctl -u caddy -f
-
-# Restart after pulling updates
-cd /opt/timeless_web
-sudo git pull
-sudo podman volume ls | grep timeless_web
-cd /opt/timeless_web/deploy
-sudo systemctl restart timeless-web
-
-# Rebuild from scratch
-cd /opt/timeless_web/deploy
-sudo podman-compose down
-sudo podman-compose up -d --build
 ```
 
 ## Backups
